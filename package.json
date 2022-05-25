@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "jest --watch"
   },
   "dependencies": {
     "antd": "^4.20.6",
@@ -19,6 +20,9 @@
     "@testing-library/react": "^13.2.0",
     "eslint": "8.16.0",
     "eslint-config-next": "12.1.6",
-    "jest": "^28.1.0"
+    "jest": "^28.1.0",
+    "jest-environment-jsdom": "^28.1.0",
+    "msw": "^0.41.0",
+    "whatwg-fetch": "^3.6.2"
   }
 }
