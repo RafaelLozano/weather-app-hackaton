@@ -6,7 +6,7 @@ const ForecastItem = ({ wheaterHour }) => {
       <p>
         {new Date(wheaterHour.time).toLocaleTimeString('es', {
           hour12: true,
-          hour: 'true'
+          hour: '2-digit'
         })}
       </p>
       <img src={wheaterHour.condition.icon} alt={wheaterHour.condition.text} />
