@@ -1,0 +1,4 @@
+.list__container {
+  display: flex;
+  overflow: auto;
+}

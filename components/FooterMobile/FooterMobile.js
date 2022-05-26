@@ -1,7 +1,14 @@
-import styles from './footerMobile.module.css';
+import styles from './footer.module.css';
 
-const FooterMobile = () => {
-  return <div>FooterMobile</div>;
+const FooterMobile = ({ drawerVisible, handleChangeDrawer }) => {
+  return (
+    <div
+      className={styles.footer}
+      onClick={() => handleChangeDrawer(!drawerVisible)}
+    >
+      FooterMobile
+    </div>
+  );
 };
 
 export default FooterMobile;

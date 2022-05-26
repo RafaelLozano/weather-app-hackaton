@@ -3,6 +3,9 @@ import { getWeatherFrom } from '../../services/wheater';
 import { Drawer, Button } from 'antd';
 import Head from 'next/head';
 import styles from './home.module.css';
+import FooterMobile from '../FooterMobile/FooterMobile';
+import ForecastItem from '../ForecastItem/ForecastItem';
+import ForecastList from '../ForecastList/ForecastList';
 const Home = () => {
   const [wheaterRawData, setWheaterRawData] = useState(null);
   const [drawerVisible, setDrawerVisible] = useState(false);
@@ -27,11 +30,28 @@ const Home = () => {
       <main className={styles.main__container}>
         <h1>{wheaterRawData?.location?.name}</h1>
         {unit === 'celsius' ? (
-          <h2>{`${wheaterRawData?.current?.temp_c} °C`}</h2>
+          <h1
+            className={styles.h1__temp}
+          >{`${wheaterRawData?.current?.temp_c} °`}</h1>
         ) : (
-          <h2>{`${wheaterRawData?.current?.temp_f} °F`}</h2>
+          <h1
+            className={styles.h1__temp}
+          >{`${wheaterRawData?.current?.temp_f} °`}</h1>
         )}
-        <Button onClick={() => setDrawerVisible(true)}>Ver</Button>
+        <h3>{wheaterRawData?.current?.condition?.text}</h3>
+        <div className={styles.forecast__container}>
+          <p>Pronostico</p>
+          <ForecastList
+            wheaterForecastHour={
+              wheaterRawData?.forecast?.forecastday?.[0]?.hour
+            }
+          />
+        </div>
+
+        {/* <FooterMobile
+          handleChangeDrawer={value => setDrawerVisible(value)}
+          drawerVisible={drawerVisible}
+        /> */}
         <Drawer
           visible={drawerVisible}
           onClose={() => setDrawerVisible(false)}

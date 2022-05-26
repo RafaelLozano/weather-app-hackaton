@@ -5,9 +5,9 @@ const FETCH_OPTIONS = {
     'X-RapidAPI-Key': '9cba21dc11mshe60c8bb47434959p1b9b03jsn2510823d8c7d'
   }
 };
-const getWeatherFrom = (query = 'Mexico') => {
+const getWeatherFrom = (query = 'Mexico', lang = 'es') => {
   return fetch(
-    `https://weatherapi-com.p.rapidapi.com/current.json?q=${query}`,
+    `https://weatherapi-com.p.rapidapi.com/forecast.json?q=${query}&lang=${lang}`,
     FETCH_OPTIONS
   );
 };
