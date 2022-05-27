@@ -1,4 +1,5 @@
-import styles from './ForecastItem.module.css';
+import { Card } from 'antd';
+import styles from './forecastItem.module.css';
 // TODO make context with configuration params such as hour format, temp unit
 const ForecastItem = ({ wheaterHour }) => {
   return (

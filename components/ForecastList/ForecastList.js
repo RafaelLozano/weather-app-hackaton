@@ -1,14 +1,17 @@
 import ForecastItem from '../ForecastItem/ForecastItem';
 import styles from './forecastList.module.css';
-const ForecastList = ({ wheaterForecastHour = [] }) => {
+import { Card, Spin } from 'antd';
+const ForecastList = ({ wheaterForecastHour = [], isFetching = false }) => {
   return (
-    <div className={styles.list__container}>
-      {wheaterForecastHour?.map(wheaterHour => {
-        return (
-          <ForecastItem key={wheaterHour?.time} wheaterHour={wheaterHour} />
-        );
-      })}
-    </div>
+    <Spin spinning={isFetching}>
+      <div className={styles.list__container}>
+        {wheaterForecastHour?.map(wheaterHour => {
+          return (
+            <ForecastItem key={wheaterHour?.time} wheaterHour={wheaterHour} />
+          );
+        })}
+      </div>
+    </Spin>
   );
 };
 
