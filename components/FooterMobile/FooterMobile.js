@@ -1,6 +1,6 @@
 import styles from './footer.module.css';
-import { MinusOutlined } from '@ant-design/icons';
-import { message } from 'antd';
+import { MinusOutlined, SettingOutlined } from '@ant-design/icons';
+
 const FooterMobile = ({
   drawerVisible,
   handleChangeDrawer,
@@ -9,7 +9,7 @@ const FooterMobile = ({
 }) => {
   return (
     <div
-      className={styles.footer}
+      className={wheaterCurrent?.is_day ? styles.footer : styles.footerNight}
       onClick={() => {
         handleChangeDrawer(!drawerVisible);
       }}
@@ -33,6 +33,7 @@ const FooterMobile = ({
           <i>{wheaterCurrent?.condition?.text}</i>
         </p>
       </div>
+      <SettingOutlined className={styles.settingsIcon} />
     </div>
   );
 };
