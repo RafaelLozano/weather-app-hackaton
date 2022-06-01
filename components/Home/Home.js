@@ -55,6 +55,36 @@ const Home = ({ location }) => {
     <div>
       <Head>
         <title>{`Wheater ${wheaterRawData?.location?.name}`}</title>
+
+        <meta name="twitter:title" content="wheater-app" />
+        <meta
+          name="twitter:creator"
+          content="https://www.linkedin.com/in/rafael-lozano-rol%C3%B3n-218b7a160/"
+        />
+        <meta
+          name="twitter:site"
+          content="https://hackaton-wheater-rapidapi.netlify.app/"
+        />
+        <meta
+          name="twitter:image"
+          content="https://raw.githubusercontent.com/RafaelLozano/wheater-hackaton/main/public/favicon.ico"
+        />
+
+        <meta property="og:title" content="wheater-app" />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:url"
+          content="https://hackaton-wheater-rapidapi.netlify.app/"
+        />
+        <meta
+          property="og:image"
+          content="https://raw.githubusercontent.com/RafaelLozano/wheater-hackaton/main/public/favicon.ico"
+        />
+        <meta
+          property="og:description"
+          content="Aplicación para obtener el clima actual de una ciudad"
+        />
+        <meta property="og:site_name" content="Wheater-app" />
       </Head>
       <Spin spinning={isFetching}>
         <main
