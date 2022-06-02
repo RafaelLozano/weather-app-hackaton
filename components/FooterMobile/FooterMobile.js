@@ -1,12 +1,15 @@
 import styles from './footer.module.css';
 import { MinusOutlined, SettingOutlined } from '@ant-design/icons';
-
+import en from '../../i18n/en';
+import es from '../../i18n/es';
 const FooterMobile = ({
   drawerVisible,
   handleChangeDrawer,
   wheaterCurrent,
-  wheaterUnit
+  wheaterUnit,
+  language
 }) => {
+  const t = language === 'es' ? es : en;
   return (
     <div
       className={wheaterCurrent?.is_day ? styles.footer : styles.footerNight}
@@ -24,11 +27,11 @@ const FooterMobile = ({
           alt={wheaterCurrent?.condition?.text}
         />
         <p>
-          Sensación térmica:{' '}
+          {`${t.footer.feelsLike}: `}
+
           {wheaterUnit === 'celsius'
-            ? wheaterCurrent?.feelslike_c
-            : wheaterCurrent?.feelslike_f}{' '}
-          °
+            ? `${wheaterCurrent?.feelslike_c} °c`
+            : `${wheaterCurrent?.feelslike_c} °f`}
           <br />
           <i>{wheaterCurrent?.condition?.text}</i>
         </p>

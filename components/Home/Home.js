@@ -1,15 +1,33 @@
 import { useEffect, useState } from 'react';
 import { getWeatherFrom } from '../../services/wheater';
-import { Drawer, Button, message, Tooltip, Spin, Input } from 'antd';
+import {
+  Drawer,
+  Button,
+  message,
+  Tooltip,
+  Spin,
+  Input,
+  Form,
+  Switch,
+  Radio,
+  Select
+} from 'antd';
 import Head from 'next/head';
 import styles from './home.module.css';
 import FooterMobile from '../FooterMobile/FooterMobile';
 import ForecastList from '../ForecastList/ForecastList';
-import { ClockCircleOutlined, DashboardOutlined } from '@ant-design/icons';
+import {
+  ClockCircleOutlined,
+  DashboardOutlined,
+  SettingOutlined
+} from '@ant-design/icons';
 import sunset from '../../assets/sunset.png';
 import sunrise from '../../assets/sunrise.png';
 import Image from 'next/image';
 import { isMobile } from 'react-device-detect';
+
+import en from '../../i18n/en';
+import es from '../../i18n/es';
 
 const Home = ({ location }) => {
   const [wheaterRawData, setWheaterRawData] = useState(null);
@@ -18,8 +36,12 @@ const Home = ({ location }) => {
   const [forecastAstro, setForecastAstro] = useState(null);
   const [mobile, setMobile] = useState(false);
 
-  //abstract this to global context
   const [unit, setUnit] = useState('celsius');
+  const [language, setLanguage] = useState('es');
+  const [cityQuery, setCityQuery] = useState(null);
+
+  const t = language === 'es' ? es : en;
+
   const handleChangeUnit = () => {
     setUnit(unit === 'celsius' ? 'fahrenheit' : 'celsius');
   };
@@ -51,6 +73,30 @@ const Home = ({ location }) => {
     setMobile(isMobile);
   }, []);
   const onSearch = value => console.log(value);
+  const handleSaveSettings = values => {
+    setLanguage(values.language);
+    setUnit(values.unit);
+    setCityQuery(values.city);
+    if (values.city || values.language) {
+      getWeatherFrom(values.city, values.language)
+        .then(res => res.json())
+        .then(data => {
+          setWheaterRawData(data);
+          setForecastAstro(data.forecast.forecastday[0].astro);
+          setIsFetching(false);
+          message.success(
+            values.language === 'es' ? es.message.success : en.message.success,
+            2
+          );
+        });
+    } else {
+      handleChangeUnit();
+      message.success(
+        values.language === 'es' ? es.message.success : en.message.success,
+        2
+      );
+    }
+  };
   return (
     <div>
       <Head>
@@ -133,7 +179,7 @@ const Home = ({ location }) => {
               <div className={styles.forecast__container}>
                 <p>
                   <ClockCircleOutlined />
-                  {'  Pronostico por hora'}
+                  {` ${t.hourly}`}
                 </p>
                 <ForecastList
                   isFetching={isFetching}
@@ -146,7 +192,7 @@ const Home = ({ location }) => {
                 <div className={styles.forecast__container_half}>
                   <p>
                     <DashboardOutlined />
-                    {'  Amancecer'}
+                    {` ${t.sunset}`}
                   </p>
                   <Image
                     className={styles.img__astro}
@@ -160,7 +206,7 @@ const Home = ({ location }) => {
                 <div className={styles.forecast__container_half}>
                   <p>
                     <DashboardOutlined />
-                    {'  Atardecer'}
+                    {` ${t.sunrise}`}
                   </p>
                   <Image
                     className={styles.img__astro}
@@ -180,6 +226,7 @@ const Home = ({ location }) => {
                 drawerVisible={drawerVisible}
                 wheaterCurrent={wheaterRawData?.current}
                 wheaterUnit={unit}
+                language={language}
               />
             )}
             <Drawer
@@ -200,13 +247,44 @@ const Home = ({ location }) => {
               }}
               height={'420px'}
             >
-              <h1>{wheaterRawData?.location?.name}</h1>
-              <h2>Configuración</h2>
-              <Button onClick={handleChangeUnit}>
-                {unit === 'celsius'
-                  ? 'Cambiar a farenheit'
-                  : 'Cambiar a celsius'}
-              </Button>
+              <h2>
+                <SettingOutlined />
+                {` ${t.footer.title}`}
+              </h2>
+              <Form onFinish={handleSaveSettings}>
+                <Form.Item
+                  name="city"
+                  label="Ciudad"
+                  rules={[
+                    {
+                      message: 'Por favor ingrese una ciudad'
+                    }
+                  ]}
+                >
+                  <Input placeholder="Ciudad" />
+                </Form.Item>
+                <Form.Item label="Unidad" name="unit" initialValue={unit}>
+                  <Radio.Group>
+                    <Radio value="celsius">Celsius</Radio>
+                    <Radio value="fahrenheit">Fahrenheit</Radio>
+                  </Radio.Group>
+                </Form.Item>
+                <Form.Item
+                  label="Lenguaje"
+                  name="language"
+                  initialValue={language}
+                >
+                  <Select>
+                    <Select.Option value="es">🇪🇸 Español</Select.Option>
+                    <Select.Option value="en">🇺🇸 English</Select.Option>
+                  </Select>
+                </Form.Item>
+                <Form.Item>
+                  <Button type="primary" htmlType="submit">
+                    Guardar
+                  </Button>
+                </Form.Item>
+              </Form>
             </Drawer>
           </div>
         </main>
