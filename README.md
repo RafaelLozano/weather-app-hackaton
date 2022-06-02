@@ -4,8 +4,13 @@
 
 Este challenge fue un gran proyecto que me sirvio para aprender:
 
-1. nextJS
-2. Context
-3. Unit test usando jest
-4. Pruebas end to end con cypress
-5. i18n
+1. nextJS 🚀
+2. Context 🔥
+3. Unit test usando jest 🧪
+4. Pruebas end to end con cypress 🤯
+5. i18n 🌎
+
+## Resultados
+
+![](https://raw.githubusercontent.com/RafaelLozano/wheater-hackaton/main/public/wheater-sc.png)
+![](https://raw.githubusercontent.com/RafaelLozano/wheater-hackaton/main/public/wheater-config-sc.png)
