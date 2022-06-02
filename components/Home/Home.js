@@ -19,7 +19,8 @@ import ForecastList from '../ForecastList/ForecastList';
 import {
   ClockCircleOutlined,
   DashboardOutlined,
-  SettingOutlined
+  SettingOutlined,
+  SearchOutlined
 } from '@ant-design/icons';
 import sunset from '../../assets/sunset.png';
 import sunrise from '../../assets/sunrise.png';
@@ -39,6 +40,7 @@ const Home = ({ location }) => {
   const [unit, setUnit] = useState('celsius');
   const [language, setLanguage] = useState('es');
   const [cityQuery, setCityQuery] = useState(null);
+  const [currentIP, setCurrentIP] = useState(null);
 
   const t = language === 'es' ? es : en;
 
@@ -50,6 +52,7 @@ const Home = ({ location }) => {
     fetch('https://api.ipify.org?format=json', { method: 'GET' }).then(res => {
       res.json().then(data => {
         setIsFetching(true);
+        setCurrentIP(data.ip);
         if (location) {
           getWeatherFrom(location)
             .then(res => res.json())
@@ -72,7 +75,7 @@ const Home = ({ location }) => {
     });
     setMobile(isMobile);
   }, []);
-  const onSearch = value => console.log(value);
+
   const handleSaveSettings = values => {
     setLanguage(values.language);
     setUnit(values.unit);
@@ -97,10 +100,29 @@ const Home = ({ location }) => {
       );
     }
   };
+  const handleChangeLanguage = lang => {
+    setLanguage(lang);
+    getWeatherFrom(location ? location : currentIP, lang)
+      .then(res => res.json())
+      .then(data => {
+        setWheaterRawData(data);
+        setForecastAstro(data.forecast.forecastday[0].astro);
+        setIsFetching(false);
+      });
+  };
+  const handleSearch = city => {
+    getWeatherFrom(city, language)
+      .then(res => res.json())
+      .then(data => {
+        setWheaterRawData(data);
+        setForecastAstro(data.forecast.forecastday[0].astro);
+        setIsFetching(false);
+      });
+  };
   return (
     <div>
       <Head>
-        <title>{`Wheater ${wheaterRawData?.location?.name}`}</title>
+        <title>{`${t.title}|${wheaterRawData?.location?.name}`}</title>
 
         <meta name="twitter:title" content="wheater-app" />
         <meta
@@ -142,16 +164,32 @@ const Home = ({ location }) => {
         >
           {!mobile && (
             <header className={styles.header}>
-              <div>
-                <Input.Search
-                  placeholder="input search text"
-                  allowClear
-                  onSearch={onSearch}
-                  bordered={false}
-                  style={{
-                    width: 200
+              <div className={styles.header__containerInner}>
+                <div className={styles.custom__inputContainer}>
+                  <SearchOutlined />
+                  <input
+                    placeholder={t.searchLabel}
+                    type="search"
+                    onChange={e => setCityQuery(e.target.value)}
+                    value={cityQuery}
+                    className={styles.search__input}
+                  />
+                  <Button
+                    type="primary"
+                    onClick={() => handleSearch(cityQuery)}
+                  >
+                    {t.searchButton}
+                  </Button>
+                </div>
+                <Select
+                  defaultValue={language}
+                  onChange={value => {
+                    handleChangeLanguage(value);
                   }}
-                />
+                >
+                  <Select.Option value="es">🇪🇸 Español</Select.Option>
+                  <Select.Option value="en">🇺🇸 English</Select.Option>
+                </Select>
               </div>
             </header>
           )}
