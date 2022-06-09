@@ -4,4 +4,10 @@
 }
 .wheater__container {
   padding: 4px 8px;
+  border-radius: 8px;
+}
+.wheater__container--active {
+  padding: 4px 8px;
+  border-radius: 8px;
+  background-color: rgb(7 89 133 / 1);
 }

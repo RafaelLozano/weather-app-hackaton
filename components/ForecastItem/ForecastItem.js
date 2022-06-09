@@ -3,13 +3,13 @@ import styles from './forecastItem.module.css';
 // TODO make context with configuration params such as hour format, temp unit
 const ForecastItem = ({ weatherHourly }) => {
   return (
+    // TODO:add dynamic style whith current hour
     <div className={styles.wheater__container}>
-      <p>
-        {new Date(weatherHourly.time).toLocaleTimeString('es', {
-          hour12: true,
+      <span class="whitespace-nowrap text-sm dark:text-white">
+        {new Date(weatherHourly.time).toLocaleTimeString('en-US', {
           hour: '2-digit'
         })}
-      </p>
+      </span>
       <div style={{ width: '64px' }}>
         <WeatherIcons
           code={weatherHourly.condition.code}
