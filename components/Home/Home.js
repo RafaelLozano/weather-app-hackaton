@@ -29,6 +29,7 @@ import { isMobile } from 'react-device-detect';
 import { WeatherIcons } from '../WeatherIcons/WeatherIcons';
 import en from '../../i18n/en';
 import es from '../../i18n/es';
+import { useGeoLocation } from '../../hooks/useGeoLocation';
 const TEST_DATA = {
   location: {
     name: 'Guadalupana [Granja]',
@@ -1060,6 +1061,7 @@ const Home = ({ location }) => {
   const [language, setLanguage] = useState('es');
   const [cityQuery, setCityQuery] = useState(null);
   const [currentIP, setCurrentIP] = useState(null);
+  const { lat, lon, error } = useGeoLocation();
 
   const t = language === 'es' ? es : en;
 
@@ -1093,11 +1095,21 @@ const Home = ({ location }) => {
     //     }
     //   });
     // });
-    setWheaterRawData(TEST_DATA);
-    setForecastAstro(TEST_DATA.forecast.forecastday[0].astro);
-    setIsFetching(false);
-    setMobile(isMobile);
-  }, []);
+    if (lat && lon) {
+      getWeatherFrom(`${lat},${lon}`).then(res => {
+        res.json().then(data => {
+          setWheaterRawData(data);
+          setForecastAstro(data.forecast.forecastday[0].astro);
+          setIsFetching(false);
+        });
+      });
+    }
+
+    // setWheaterRawData(TEST_DATA);
+    // setForecastAstro(TEST_DATA.forecast.forecastday[0].astro);
+    // setIsFetching(false);
+    // setMobile(isMobile);
+  }, [lat, lon]);
 
   const handleSaveSettings = values => {
     setLanguage(values.language);
