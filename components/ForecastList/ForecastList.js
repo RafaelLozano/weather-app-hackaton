@@ -5,9 +5,12 @@ const ForecastList = ({ wheaterForecastHour = [], isFetching = false }) => {
   return (
     <Spin spinning={isFetching}>
       <div className={styles.list__container}>
-        {wheaterForecastHour?.map(wheaterHour => {
+        {wheaterForecastHour?.map(weatherHourly => {
           return (
-            <ForecastItem key={wheaterHour?.time} wheaterHour={wheaterHour} />
+            <ForecastItem
+              key={weatherHourly?.time}
+              weatherHourly={weatherHourly}
+            />
           );
         })}
       </div>

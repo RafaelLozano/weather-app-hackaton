@@ -1,6 +1,6 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/c1ed75ff-48a7-4e08-9ba6-28100297a583/deploy-status)](https://app.netlify.com/sites/hackaton-wheater-rapidapi/deploys)
 
-# 🌤 wheater-challenge
+# 🌤 weather-challenge
 
 Este challenge fue un gran proyecto que me sirvio para aprender:
 
