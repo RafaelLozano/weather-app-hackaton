@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getWeatherFrom } from '../../services/wheater';
+import { getWeatherFrom } from '../../services/weather';
 import {
   Drawer,
   Button,
@@ -1053,7 +1053,7 @@ const TEST_DATA = {
 const Home = ({ location }) => {
   const [wheaterRawData, setWheaterRawData] = useState(null);
   const [drawerVisible, setDrawerVisible] = useState(false);
-  const [isFetching, setIsFetching] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
   const [forecastAstro, setForecastAstro] = useState(null);
   const [mobile, setMobile] = useState(false);
 
@@ -1070,31 +1070,6 @@ const Home = ({ location }) => {
   };
 
   useEffect(() => {
-    // fetch('https://api.ipify.org?format=json', { method: 'GET' }).then(res => {
-    //   res.json().then(data => {
-    //     setIsFetching(true);
-    //     setCurrentIP(data.ip);
-    //     if (location) {
-    //       getWeatherFrom(location)
-    //         .then(res => res.json())
-    //         .then(data => {
-    //           setWheaterRawData(data);
-    //           setForecastAstro(data.forecast.forecastday[0].astro);
-    //           setIsFetching(false);
-    //         });
-
-    //     } else {
-    //       getWeatherFrom(data.ip)
-    //         .then(res => res.json())
-    //         .then(data => {
-    //           setWheaterRawData(data);
-    //           setForecastAstro(data.forecast.forecastday[0].astro);
-
-    //           setIsFetching(false);
-    //         });
-    //     }
-    //   });
-    // });
     if (lat && lon) {
       getWeatherFrom(`${lat},${lon}`).then(res => {
         res.json().then(data => {
@@ -1109,7 +1084,11 @@ const Home = ({ location }) => {
     // setForecastAstro(TEST_DATA.forecast.forecastday[0].astro);
     // setIsFetching(false);
     // setMobile(isMobile);
-  }, [lat, lon]);
+    if (error) {
+      message.error(error);
+      console.log(error);
+    }
+  }, [lat, lon, error]);
 
   const handleSaveSettings = values => {
     setLanguage(values.language);
@@ -1154,6 +1133,9 @@ const Home = ({ location }) => {
         setIsFetching(false);
       });
   };
+  if (isFetching) {
+    return <Spin tip="Cargando" spinning={isFetching} />;
+  }
   return (
     <div>
       <Head>

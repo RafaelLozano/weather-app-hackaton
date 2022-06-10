@@ -1,3 +1,4 @@
+//TODO extract this host and key to .env file
 const FETCH_OPTIONS = {
   method: 'GET',
   headers: {
@@ -11,4 +12,10 @@ const getWeatherFrom = (query = 'Mexico', lang = 'es') => {
     FETCH_OPTIONS
   );
 };
-export { getWeatherFrom };
+const getCitiesName = cities => {
+  return fetch(
+    `https://weatherapi-com.p.rapidapi.com/search.json?q=${cities}`,
+    FETCH_OPTIONS
+  );
+};
+export { getWeatherFrom, getCitiesName };
