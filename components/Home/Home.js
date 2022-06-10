@@ -30,6 +30,10 @@ import { WeatherIcons } from '../WeatherIcons/WeatherIcons';
 import en from '../../i18n/en';
 import es from '../../i18n/es';
 import { useGeoLocation } from '../../hooks/useGeoLocation';
+import React from 'react';
+import * as echarts from 'echarts';
+import ReactECharts from 'echarts-for-react';
+import Loading from '../Loading';
 const TEST_DATA = {
   location: {
     name: 'Guadalupana [Granja]',
@@ -1050,6 +1054,20 @@ const TEST_DATA = {
     ]
   }
 };
+echarts.registerTheme('my_theme', {
+  backgroundColor: 'rgb(15,23,42)',
+  color: ['#c1232b', '#facc15', '#fcce10'],
+
+  subtitleColor: '#aaaaaa',
+  textColorShow: false,
+  textColor: '#fff',
+  markTextColor: '#fff',
+  textStyle: {
+    color: '#fff'
+  },
+  legendTextColor: '#f8fafc'
+});
+
 const Home = ({ location }) => {
   const [wheaterRawData, setWheaterRawData] = useState(null);
   const [drawerVisible, setDrawerVisible] = useState(false);
@@ -1080,15 +1098,60 @@ const Home = ({ location }) => {
       });
     }
 
-    // setWheaterRawData(TEST_DATA);
-    // setForecastAstro(TEST_DATA.forecast.forecastday[0].astro);
-    // setIsFetching(false);
-    // setMobile(isMobile);
     if (error) {
       message.error(error);
       console.log(error);
     }
   }, [lat, lon, error]);
+
+  const option = {
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: { type: 'line' }
+    },
+    legend: { textStyle: { color: '#fff' } },
+    xAxis: {
+      type: 'category',
+      axisTick: {
+        alignWithLabel: true
+      },
+      data: wheaterRawData?.forecast?.forecastday?.[0]?.hour?.map(
+        weatherHourly =>
+          new Date(weatherHourly?.time).toLocaleTimeString('en-US', {
+            hour12: true,
+            hour: 'numeric'
+          })
+      )
+    },
+    yAxis: {
+      type: 'value',
+      name: 'Temperatura',
+      min: 0,
+
+      position: 'left',
+      axisLabel: {
+        formatter: '{value} °C'
+      }
+    },
+    series: [
+      {
+        data: wheaterRawData?.forecast?.forecastday?.[0]?.hour?.map(
+          weatherHourly => weatherHourly?.temp_c
+        ),
+        type: 'line',
+        smooth: true,
+        name: 'Temperatura'
+      },
+      {
+        data: wheaterRawData?.forecast?.forecastday?.[0]?.hour?.map(
+          weatherHourly => weatherHourly?.feelslike_c
+        ),
+        type: 'line',
+        smooth: true,
+        name: 'Sensación termica'
+      }
+    ]
+  };
 
   const handleSaveSettings = values => {
     setLanguage(values.language);
@@ -1134,7 +1197,7 @@ const Home = ({ location }) => {
       });
   };
   if (isFetching) {
-    return <Spin tip="Cargando" spinning={isFetching} />;
+    return <Loading />;
   }
   return (
     <div>
@@ -1229,6 +1292,18 @@ const Home = ({ location }) => {
                 >{`${wheaterRawData?.current?.temp_f} °`}</h1>
               )}
               <h3>{wheaterRawData?.current?.condition?.text}</h3>
+            </div>
+            <div
+              style={{
+                backgroundColor: 'rgb(15 23 42 / 1)',
+                borderRadius: '10px'
+              }}
+            >
+              <ReactECharts
+                option={option}
+                theme={'my_theme'}
+                className="class_2"
+              />
             </div>
             <div className={styles.forecast__mainContainer}>
               <div className={styles.forecast__container}>

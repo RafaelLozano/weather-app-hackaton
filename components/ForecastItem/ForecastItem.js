@@ -7,7 +7,8 @@ const ForecastItem = ({ weatherHourly }) => {
     <div className={styles.wheater__container}>
       <span class="whitespace-nowrap text-sm dark:text-white">
         {new Date(weatherHourly.time).toLocaleTimeString('en-US', {
-          hour: '2-digit'
+          hour12: true,
+          hour: 'numeric'
         })}
       </span>
       <div style={{ width: '64px' }}>

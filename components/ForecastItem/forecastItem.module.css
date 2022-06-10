@@ -5,8 +5,9 @@
 .wheater__container {
   padding: 4px 8px;
   border-radius: 8px;
+  text-align: center;
 }
-.wheater__container--active {
+.wheater__container:hover {
   padding: 4px 8px;
   border-radius: 8px;
   background-color: rgb(7 89 133 / 1);
